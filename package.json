@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tailwindcss -i app.src.css -o app.dist.css --watch",
-    "test": "postcss --help"
+    "dev": "tailwindcss -i app.src.css -o app.dist.css --watch"
   },
   "keywords": [],
   "author": "",
