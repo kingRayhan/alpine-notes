@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes app</title>
+    <link rel="stylesheet" href="app.dist.css" />
+    <script src="//unpkg.com/alpinejs" defer></script>
+  </head>
+
+  <body>
+    <div class="flex flex-col h-screen overflow-hidden bg-gray-100">
+      <main
+        class="flex flex-1 min-w-0 min-h-0 overflow-hidden border-t border-gray-200 "
+      >
+        <div
+          class="flex flex-1 w-full h-full min-h-0 overflow-y-scroll bg-white"
+        >
+          <div class="flex flex-col w-full p-6" x-data>
+            <input
+              type="text"
+              class="w-full mb-6 text-lg font-medium text-gray-900  focus:outline-none"
+              placeholder="Untitled note"
+              x-model="$store.notes.current.title"
+              @keyup.debounce.200="$store.notes.touchCurrentNote()"
+              autofocus
+            />
+
+            <textarea
+              class="flex-1 w-full mb-6 outline-none"
+              placeholder="Start writing..."
+              x-model="$store.notes.current.body"
+              @keyup.debounce.200="$store.notes.touchCurrentNote()"
+            ></textarea>
+
+            <div>
+              <button
+                @click="$store.notes.deleteNoteById($store.notes.current.id)"
+                class="text-sm text-red-500"
+              >
+                Delete note
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <aside
+          class="relative flex flex-col flex-shrink-0 order-first h-full bg-gray-100 border-r border-gray-200  w-96"
+        >
+          <div
+            class="flex flex-col justify-center flex-shrink-0 h-16 px-6 bg-white "
+          >
+            <div class="flex justify-between space-x-3" x-data>
+              <div class="flex items-baseline">
+                <h2 class="mr-3 text-lg font-medium text-gray-900">Notes</h2>
+                <p class="text-sm font-medium text-gray-500"></p>
+              </div>
+              <button class="text-sm" @click="$store.notes.createNote()">
+                New note
+              </button>
+            </div>
+          </div>
+
+          <nav class="flex-1 min-h-0 overflow-y-auto">
+            <ul
+              class="border-b border-gray-200 divide-y divide-gray-200"
+              x-data
+            >
+              <template
+                x-for="note in $store.notes.sortedNotesByLastEdited"
+                :key="note.id"
+              >
+                <li
+                  class="relative px-6 py-5 bg-white  focus:outline-none hover:bg-gray-100 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-600"
+                  @click.prevent="$store.notes.setCurrentNoteByIndex($store.notes.data.indexOf(note))"
+                  :class="{'bg-gray-200': $store.notes.currentNoteId === note.id}"
+                >
+                  <div class="flex justify-between space-x-3">
+                    <a href="#" class="block focus:outline-none">
+                      <span class="absolute inset-0"></span>
+                      <p
+                        class="text-sm text-gray-500 truncate"
+                        x-text="note.title || 'Untitles note'"
+                      ></p>
+                    </a>
+
+                    <time
+                      class="flex-shrink-0 text-sm text-gray-500  whitespace-nowrap"
+                      x-text="`${new Date(note.lastEdited).getHours().toString().padStart(2, '0')}:${new Date(note.lastEdited).getMinutes().toString().padStart(2, '0')}`"
+                    ></time>
+                  </div>
+                  <div class="mt-1">
+                    <p
+                      class="text-sm text-gray-600"
+                      x-text="note.body.slice(0, 100)"
+                    ></p>
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </nav>
+        </aside>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

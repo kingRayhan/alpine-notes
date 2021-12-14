@@ -1,0 +1,16 @@
+{
+  "name": "alpine-notes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tailwindcss -i app.src.css -o app.dist.css --watch",
+    "test": "postcss --help"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.0.2"
+  }
+}
